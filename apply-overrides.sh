@@ -27,10 +27,11 @@ mkdir -p android/app/src/main/res/xml
 cp android-overrides/xml/*.xml android/app/src/main/res/xml/
 
 echo "==> Applying gradle config"
-cp android-overrides/variables.gradle android/variables.gradle
-cp android-overrides/app-build.gradle android/app/build.gradle
-cp android-overrides/build.gradle.root android/build.gradle
-cp android-overrides/proguard-rules.pro android/app/proguard-rules.pro
+echo "==> Applying gradle config"
+# cp android-overrides/variables.gradle android/variables.gradle
+# cp android-overrides/app-build.gradle android/app/build.gradle
+# cp android-overrides/build.gradle.root android/build.gradle
+# cp android-overrides/proguard-rules.pro android/app/proguard-rules.pro
 cp android-overrides/keystore.properties.example android/../keystore.properties.example 2>/dev/null || \
   cp android-overrides/keystore.properties.example keystore.properties.example
 
