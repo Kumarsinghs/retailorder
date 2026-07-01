@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Photos taken via the camera for prescription/invoice capture -->
+    <external-files-path name="my_images" path="Pictures"/>
+    <external-cache-path name="my_cache_images" path="."/>
+    <cache-path name="my_cache" path="."/>
+
+    <!-- Downloaded PDFs / JSON order exports -->
+    <external-files-path name="my_downloads" path="Download"/>
+    <external-path name="external_downloads" path="Download"/>
+
+    <files-path name="internal_files" path="."/>
+</paths>

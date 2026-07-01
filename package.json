@@ -1,0 +1,31 @@
+{
+  "name": "meditrack-retailorder-android",
+  "version": "1.0.0",
+  "description": "Native Android wrapper (Capacitor) for the MediTrack Retail Order PWA",
+  "private": true,
+  "scripts": {
+    "sync": "npx cap sync android",
+    "open:android": "npx cap open android",
+    "assets": "npx @capacitor/assets generate --android",
+    "build:debug": "cd android && ./gradlew assembleDebug",
+    "build:release-apk": "cd android && ./gradlew assembleRelease",
+    "build:release-aab": "cd android && ./gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/app": "^6.0.1",
+    "@capacitor/camera": "^6.1.0",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/filesystem": "^6.0.1",
+    "@capacitor/keyboard": "^6.0.2",
+    "@capacitor/network": "^6.0.2",
+    "@capacitor/push-notifications": "^6.0.2",
+    "@capacitor/share": "^6.0.2",
+    "@capacitor/splash-screen": "^6.0.2",
+    "@capacitor/status-bar": "^6.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2"
+  }
+}

@@ -1,0 +1,112 @@
+name: Build Android App
+
+# Runs automatically on every push to main/master, and can also be triggered
+# manually from the Actions tab ("Run workflow" button).
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    name: Build APK / AAB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install JS dependencies
+        run: npm install
+
+      - name: Generate native Android project
+        run: npx cap add android
+
+      - name: Apply icons / manifest / gradle overrides
+        run: bash apply-overrides.sh
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      # ---- Debug APK: always built, no signing secrets required ----
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: meditrack-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      # ---- Release APK + AAB: only built if signing secrets are configured ----
+      - name: Check for release signing secrets
+        id: signing_check
+        run: |
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "has_signing=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_signing=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Decode release keystore
+        if: steps.signing_check.outputs.has_signing == 'true'
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/meditrack-release.jks
+
+      - name: Write keystore.properties
+        if: steps.signing_check.outputs.has_signing == 'true'
+        run: |
+          cat > android/keystore.properties << EOF
+          storeFile=../meditrack-release.jks
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          EOF
+
+      - name: Build release APK
+        if: steps.signing_check.outputs.has_signing == 'true'
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      - name: Build release AAB (Play Store)
+        if: steps.signing_check.outputs.has_signing == 'true'
+        working-directory: android
+        run: ./gradlew bundleRelease
+
+      - name: Upload release APK
+        if: steps.signing_check.outputs.has_signing == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: meditrack-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Upload release AAB
+        if: steps.signing_check.outputs.has_signing == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: meditrack-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Note about unsigned build
+        if: steps.signing_check.outputs.has_signing == 'false'
+        run: |
+          echo "::warning::No signing secrets found — only the debug APK was built."
+          echo "::warning::Add ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD as repo secrets to also get signed release APK/AAB. See README.md section 'GitHub Actions cloud build'."

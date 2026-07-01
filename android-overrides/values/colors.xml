@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0A1628</color>
+    <color name="colorPrimaryDark">#060E19</color>
+    <color name="colorAccent">#2DD4BF</color>
+
+    <!-- Splash screen background (matches site theme-color) -->
+    <color name="splashBackground">#0A1628</color>
+
+    <!-- Adaptive icon background -->
+    <color name="ic_launcher_background">#0A1628</color>
+
+    <!-- Status/nav bar -->
+    <color name="statusBarColor">#0A1628</color>
+    <color name="navigationBarColor">#0A1628</color>
+</resources>

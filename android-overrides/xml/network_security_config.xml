@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Enforces HTTPS everywhere. cleartextTrafficPermitted is false by default
+  (inherited from base-config), so no plain-HTTP requests are allowed anywhere
+  in the app, including WebView subresources.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+
+    <!-- Production domain the app loads (Netlify + its CDN certs) -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">meditrack-retailorder.netlify.app</domain>
+        <domain includeSubdomains="true">netlify.app</domain>
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

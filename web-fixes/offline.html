@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0A1628" />
+  <title>MediTrack — Offline</title>
+  <style>
+    html, body {
+      margin: 0; height: 100%;
+      background: #0A1628; color: #fff;
+      font-family: -apple-system, Roboto, "Segoe UI", sans-serif;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card { text-align: center; padding: 32px; max-width: 360px; }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 20px; margin: 0 0 8px; }
+    p { color: #9CA8B8; font-size: 14px; line-height: 1.5; }
+    button {
+      margin-top: 20px; padding: 12px 24px; border-radius: 8px; border: none;
+      background: #2DD4BF; color: #0A1628; font-weight: 600; font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📡</div>
+    <h1>You're offline</h1>
+    <p>No internet connection right now. Any order drafts you've started are saved locally on this device and will sync automatically once you're back online.</p>
+    <button onclick="location.reload()">Retry</button>
+  </div>
+</body>
+</html>
